@@ -1,0 +1,33 @@
+name: Build and Deployment
+on:
+  repository_dispatch:
+    types: [production-build, staging-build, development-build]
+
+jobs:
+  Prepare:
+    name: Prepare
+    runs-on: generic-linux
+    outputs:
+      environment: ${{ steps.variables.outputs.environment }}
+    steps:
+      - name: Setup variables
+        id: variables
+        shell: bash
+        run: |
+          environment='a'
+
+          if ${{ github.event_name == 'repository_dispatch' }}
+          then
+            if ${{ github.event.action == 'production-build' }}
+            then
+              environment='production';
+            elif ${{ github.event.action == 'staging-build' }}
+            then
+              environment='staging';
+            else
+              environment='development'
+            fi
+          fi
+
+          echo $environment
+          echo ::set-output name=environment::$environment
