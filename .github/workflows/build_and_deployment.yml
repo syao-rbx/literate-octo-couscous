@@ -15,8 +15,8 @@ jobs:
     name: Prepare
     # if: ${{ github.event_name == 'repository_dispatch' && (github.event.action == 'production-build' || github.event.action == 'staging-build') }}
     runs-on: ubuntu-latest
-    # outputs:
-    #   environment: ${{ steps.variables.outputs.environment }}
+    outputs:
+      environment: ${{ steps.variables.outputs.environment }}
     steps:
       - name: Setup variables
         id: variables
