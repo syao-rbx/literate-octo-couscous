@@ -1,12 +1,19 @@
 name: Build and Deployment
 on:
+  pull_request:
+    types:
+      - opened
+  push:
+  # Do not run push events to branches with prefix
+    branches-ignore:
+      - 'test/**'  
   repository_dispatch:
     types: [production-build, staging-build, development-build]
 
 jobs:
   Prepare:
     name: Prepare
-    if: ${{ github.event_name == 'repository_dispatch' && (github.event.action == 'production-build' || github.event.action == 'staging-build') }}
+    # if: ${{ github.event_name == 'repository_dispatch' && (github.event.action == 'production-build' || github.event.action == 'staging-build') }}
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.variables.outputs.environment }}
@@ -17,18 +24,18 @@ jobs:
         run: |
           environment='a'
 
-          if ${{ github.event_name == 'repository_dispatch' }}
-          then
-            if ${{ github.event.action == 'production-build' }}
-            then
-              environment='production';
-            elif ${{ github.event.action == 'staging-build' }}
-            then
-              environment='staging';
-            else
-              environment='development'
-            fi
-          fi
+          # if ${{ github.event_name == 'repository_dispatch' }}
+          # then
+          #   if ${{ github.event.action == 'production-build' }}
+          #   then
+          #     environment='production';
+          #   elif ${{ github.event.action == 'staging-build' }}
+          #   then
+          #     environment='staging';
+          #   else
+          #     environment='development'
+          #   fi
+          # fi
 
           echo $environment
           echo ::set-output name=environment::$environment
