@@ -1,5 +1,12 @@
 name: Build and Deployment
 on:
+  pull_request:
+    types:
+      - opened
+  push:
+  # Do not run push events to branches with prefix
+    # branches-ignore:
+    #   - 'test/**'  
   repository_dispatch:
     types: [production-build, staging-build, development-build]
 
